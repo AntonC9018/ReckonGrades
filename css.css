@@ -1,0 +1,132 @@
+
+div.person {
+  width: auto;
+  border: 2px solid black;
+  padding: 16px;
+
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.container {
+  padding: 10px;
+  display: grid;
+  grid-gap: 1px;
+  border: 1px solid red;
+}
+
+.secret {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .grades {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .grades {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .container {
+    width: calc(100% - 20px) !important;
+  }
+}
+
+@media (max-width: 1200px){
+  .container {
+    width: 80%;
+  }
+}
+
+@media not all and (max-width: 1200px) {
+  .container {
+    width: 60%;
+    float: left;
+  }
+  .secret {
+    display: inline;
+    border: 10px ridge orange;
+    margin-left: 2%;
+    width: 25%;
+  }
+}
+
+.grades {
+  padding: 10px;
+  border: 2px solid black;
+  grid-column-start: 3;
+  grid-column-end: 5;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+
+}
+
+button {
+  color: white;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+
+
+  /* text-align: center;
+  display:table-cell; */
+}
+
+.but-great {
+  background-color: rgb(111, 208, 87);
+  border-color: rgb(111, 208, 87);
+}
+
+.but-good {
+  background-color: rgb(180, 214, 116);
+  border-color: rgb(200, 212, 61);
+}
+
+.but-mediocre {
+  background-color: rgb(223, 177, 74);
+  border-color: rgb(223, 177, 74);
+}
+
+.but-bad {
+  background-color: rgb(222, 45, 45);
+  border-color: rgb(222, 45, 45);
+}
+
+.controls {
+  grid-column: 6;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+  grid-column-gap: 5px;
+}
+
+.plus {
+  width: 45px;
+  height: 45px;
+  font-size: 35px;
+  color: black;
+  grid-column: 1;
+
+  background-color: rgb(111, 208, 87) !important;
+  border-color: rgb(111, 208, 87) !important;
+}
+
+.delete {
+  width: 45px;
+  height: 45px;
+  font-size: 35px;
+  color: black;
+  grid-column: 2;
+
+
+    background-color: rgb(222, 45, 45) !important;
+    border-color: rgb(222, 45, 45) !important;
+}
