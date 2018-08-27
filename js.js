@@ -1,7 +1,5 @@
 $(document).ready(function() {
   studentFactory();
-  studentFactory();
-  studentFactory();
 
   $(window).click(function() {
     $(".person, .grades, .controls").css("background-color", "unset");
@@ -18,9 +16,23 @@ $(document).ready(function() {
           .not(".minus")
           .get( (i === 0) ? 9 : i-1)
           .click();
-        };
-      };
-  });
+        }
+      }
+  }).keydown(function(event) {
+    if ($("input:focus").length === 0) {
+      if (event.keyCode === 32) {studentFactory();}
+      if (event.keyCode === 46) {deleteStudent(focused);}
+      if (event.keyCode === 40) {
+        $('.person.num-' + ((focused < studentCount - 1) ? focused+1 : 1))
+        .click();
+      }
+      if (event.keyCode === 38) {
+        $('.person.num-' + ((focused === 1) ? studentCount - 1 : focused-1))
+        .click();
+      }
+      if (event.keyCode === 13) {submit(); $("button.submit").trigger("click");}
+    }
+ });
 
   $(".submit").click(submit);
 });

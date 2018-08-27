@@ -10,8 +10,8 @@ var submit = function() {
       offSet++;
     } else {
       avg += students[i-offSet].mean;
-    };
-  };
+    }
+  }
 
   avg = Math.round(avg * 100 / (students.length)) / 100;
 
@@ -35,9 +35,9 @@ var submit = function() {
     for (let j = 0; j < students[i].grades.length; j++) {
       file += students[i].grades[j];
       file += (students[i].grades[j] === 10) ? ' ' : '  ';
-    };
+    }
     file += '\r\n';
-  };
+  }
 
   let d = new Date();
 
@@ -59,8 +59,8 @@ var calcStudentMean = function(row) {
   for (let i = 0; i < gradesCount.length; i++) {
     for (let j = 0; j < gradesCount[i]; j++) {
       grades.push(i+1);
-    };
-  };
+    }
+  }
 
   let count = gradesCount.reduce((a, b) => a + b);
   let sum = (grades.length > 0) ? grades.reduce((a, b) => a + b) : 0;

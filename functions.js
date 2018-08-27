@@ -4,11 +4,15 @@ var focused = 0;
 var deleteStudent = function(elem) {
 
   let clickedRow;
-  if (elem != null) {
+  if (elem != null && isNaN(elem)) {
     clickedRow = getClickedRow(elem);
-  } else {
+  } else if (elem === undefined || elem === 0) {
     clickedRow = studentCount - 1;
-  };
+  } else {
+  clickedRow = elem;
+  }
+
+  if (studentCount === 2) return;
 
   $("div.num-" + clickedRow).remove();
   for (let i = clickedRow; i < studentCount - 1; i++) {
@@ -17,7 +21,7 @@ var deleteStudent = function(elem) {
     .addClass("num-" + i)
     .find("strong")
     .html("Student #" + i);
-  };
+  }
   studentCount--;
 }
 
@@ -35,8 +39,8 @@ var getClickedRow = function(elem) {
   for (let i = 0; i < classes.length; i++) {
     if (classes[i].indexOf('num-') == 0) {
       return parseFloat(classes[i].substr(4));
-    };
-  };
+    }
+  }
   return -1;
 }
 
@@ -47,20 +51,20 @@ var giveClickListeners = function() {
   $(".person" + numClass + " .name").focusin(function() {
     if (this.value === "Name") {
       this.select();
-    };
+    }
     $(this).parent().click();
   }).keypress(function(event) {
   // enter
     if (event.which === 13) {
       $(this).blur();
       return;
-    };
+    }
     // not type in digits (from 0 through 9)
     for (let i = 0; i < 10; i++) {
       if (event.which === i + 48) {
         event.preventDefault();
-      };
-    };
+      }
+    }
 
   });
   // 'student' and 'grades' divs
@@ -90,18 +94,18 @@ var giveClickListeners = function() {
   }).mouseenter(function() {
     if (focused != getClickedRow(this)) {
       $(this).css("background-color", "rgb(254, 255, 191)");
-    };
+    }
 
   }).mouseleave(function() {
     if (focused != getClickedRow(this)) {
       $(this).css("background-color", "unset");
-    };
+    }
   });
 
   // "delete" button
   $(numClass + ".delete").click(function() {
     // don't do anything if there is only one student left
-    if (studentCount === 2) {return};
+    if (studentCount === 2) {return}
     $("button.grade.minus, input.grade").hide();
     deleteStudent(this);
   });
@@ -123,6 +127,6 @@ var giveClickListeners = function() {
   }).on('blur', (function() {
     if (this.value === '') {
       this.value = 0;
-    };
+    }
   }));
 }
