@@ -16,7 +16,7 @@ var studentFactory = function() {
   // create and fill div for grades
   let gradesDiv = $('<div class="grades ' + numClass + '"/>');
   let gradeEls = [];
-  let qualClasses = ["but-bad",      "but-bad",
+  let qualClasses = ["but-bad",    "but-bad",
                    "but-bad",      "but-bad",
                    "but-mediocre", "but-mediocre",
                    "but-good",     "but-good",
@@ -36,21 +36,26 @@ var studentFactory = function() {
       .appendTo(gradeEls[i])
       .click(function() {
         $(this).siblings().filter("input").get(0).value++;
+      }).focusin(function() {
+        $(this).siblings().filter('input').focus();
       });
 
     // add input that shows number of grades
-    $('<input>')
+    let input = $('<input>')
       .attr({
         dataToggle: "tooltip",
         title: "Number of grades of the value" + (i+1),
       })
       .addClass("grade grade" + (i+1))
       .appendTo(gradeEls[i])
-      .hide()
       .val("0");
 
+    if (!alwaysShow) {
+      input.hide();
+    }
+
     // add a minus button
-    $('<button>')
+    let but = $('<button>')
       .attr({
         dataToggle: "tooltip",
         title: "Decrement"
@@ -58,13 +63,33 @@ var studentFactory = function() {
       .addClass("grade grade" + (i+1) + " minus")
       .html("-")
       .appendTo(gradeEls[i])
-      .hide()
       .click(function() {
         let u = $(this).siblings().filter("input").get(0);
         if (u.value > 0) {
           u.value--;
-        };
+        }
+      }).focus(function(event) { // very fancy refocusing on input boxes
+        let grade = $(this).siblings().filter('button')
+                      .not('.minus').html();
+        if (grade < 10) {
+          grade++;
+          $('.num-' + getClickedRow($(this).parent().parent())
+           + `.grades input.grade${grade}`)
+            .focus();
+        } else {
+          let numClass = getClickedRow($(this).parent().parent());
+          if (numClass === studentCount - 1) {
+            $('.num-1.person .name').focus();
+          } else {
+            numClass++;
+            $(`.num-${numClass}.person .name`).focus();
+          }
+        }
       });
+
+    if (!alwaysShow) {
+      but.hide();
+    }
 
     // append the element to gradesDiv
     gradeEls[i].appendTo(gradesDiv);
@@ -97,4 +122,7 @@ var studentFactory = function() {
   giveClickListeners();
   focused = studentCount;
   studentCount++;
+
+  $("div.person.num-" + focused).trigger("click");
+  $("div.num-" + focused + " .name").focus();
 }
