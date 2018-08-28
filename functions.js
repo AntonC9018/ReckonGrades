@@ -1,8 +1,10 @@
 var studentCount = 1;
 var focused = 0;
+var alwaysShow = false;
 
 var deleteStudent = function(elem) {
 
+  // Quick check if the function is called on a concrete element
   let clickedRow;
   if (elem != null && isNaN(elem)) {
     clickedRow = getClickedRow(elem);
@@ -11,21 +13,22 @@ var deleteStudent = function(elem) {
   } else {
   clickedRow = elem;
   }
-
+  // Not delete the only one
   if (studentCount === 2) return;
-
+  // Delete the whole row
   $("div.num-" + clickedRow).remove();
+  // Move indeces of rows below deleted one up
   for (let i = clickedRow; i < studentCount - 1; i++) {
     $("div.num-" + (i + 1) + ",button.num-" + (i + 1))
     .removeClass("num-" + (i + 1))
     .addClass("num-" + i)
     .find("strong")
-    .html("Student #" + i);
+    .html("Student #" + i); // change the label
   }
-  studentCount--;
+  studentCount--; // decrease the total # of students
 }
 
-var debug = function() {
+var debug = function() { // show css "num-" classes
   for (let i = 1; i < studentCount; i++) {
     $("div.num-" + i)
     .find("strong")
@@ -34,11 +37,15 @@ var debug = function() {
 }
 
 var getClickedRow = function(elem) {
+  // get all classes
+  if (elem instanceof jQuery) {
+    elem = elem.get(0);
+  }
   let classes = elem.className.split(' ');
 
   for (let i = 0; i < classes.length; i++) {
-    if (classes[i].indexOf('num-') == 0) {
-      return parseFloat(classes[i].substr(4));
+    if (classes[i].indexOf('num-') == 0) { // find "num-" class
+      return parseInt(classes[i].substr(4)); // get the index
     }
   }
   return -1;
@@ -48,11 +55,14 @@ var giveClickListeners = function() {
   let numClass = ".num-" + studentCount;
 
   // input field for name of students
-  $(".person" + numClass + " .name").focusin(function() {
-    if (this.value === "Name") {
-      this.select();
-    }
-    $(this).parent().click();
+  $(".person" + numClass + " .name")
+    .focusin(function() {
+      // select text if the name has not been set yet
+      if (this.value === "Name") {
+        this.select();
+      }
+      // light up this row (in case of tabbing it wouldn't light up itself)
+       $(this).parent().click();
   }).keypress(function(event) {
   // enter
     if (event.which === 13) {
@@ -68,28 +78,35 @@ var giveClickListeners = function() {
 
   });
   // 'student' and 'grades' divs
-  $(".person, .grades, .controls").filter(numClass).click(function(event) {
-    // get the row clicked
-    let clickedRow = getClickedRow(this)
-    let rowClass = '.num-' + clickedRow;
+  $(".person, .grades, .controls")
+   .filter(numClass)
+   .click(function(event) {
+     // get the row clicked
+     let clickedRow = getClickedRow(this);
+     let rowClass = '.num-' + clickedRow;
 
-    // put out everything else
-    $(".person, .grades, .controls").not(rowClass).css("background-color", "unset");
+     // put out everything else
+     $(".person, .grades, .controls")
+       .not(rowClass)
+       .css("background-color", "unset");
 
-    // change bg to green
-    $(rowClass).css("background-color", "rgb(117, 227, 125)");
-    // register the color change
-    focused = clickedRow;
+     // change bg to green
+     $(rowClass).css("background-color", "rgb(117, 227, 125)");
 
-    // hide minuses and input boxes
-    $("button.grade.minus, input.grade").hide();
-    // light up minuses and input boxes
-    $(rowClass + " button.grade.minus, " + rowClass + " input.grade")
-      .toggle();
+     if (!alwaysShow) {
+       // hide minus buttons and input boxes
+       $("button.grade.minus, input.grade").hide();
+       // light up minuses and input boxes
+       $(`${rowClass} button.grade.minus,${rowClass} input.grade`)
+       .toggle();
+     }
 
-    // prevent the window's event listener's actions
-    // that could put out the new bg right away
-    event.stopPropagation();
+     // prevent the window's event listener's actions
+     // that could put out the new bg right away
+     event.stopPropagation();
+
+     // register the focus
+     focused = clickedRow;
 
   }).mouseenter(function() {
     if (focused != getClickedRow(this)) {
@@ -104,29 +121,33 @@ var giveClickListeners = function() {
 
   // "delete" button
   $(numClass + ".delete").click(function() {
-    // don't do anything if there is only one student left
-    if (studentCount === 2) {return}
-    $("button.grade.minus, input.grade").hide();
+
+    if (!alwaysShow) {
+      $("button.grade.minus, input.grade").hide();
+    }
     deleteStudent(this);
   });
 
   // "create" button
   $(numClass + ".plus").click(function(event) {
     studentFactory();
-    $("div.person.num-" + focused).trigger("click");
-    $("div.num-" + focused + " .name").focus();
     event.stopPropagation();
   });
 
-  $(".grades" + numClass + " .grade.grade-buttons input").keypress(function(event) {
-    if (event.which >= 48 && event.which <= 58) {
-      event.stopPropagation();
-    } else {
-      event.preventDefault();
-    };
-  }).on('blur', (function() {
-    if (this.value === '') {
-      this.value = 0;
-    }
-  }));
+  $(".grades" + numClass + " .grade.grade-buttons input")
+    .keypress(function(event) {
+      // only type in numbers while not tweaking other values
+      if (event.which >= 48 && event.which <= 58) {
+        event.stopPropagation();
+      } else {
+        event.preventDefault();
+      };
+    }).on('blur', function() {
+      // default to '0' if the user left input box empty
+      if (this.value === '') {
+        this.value = 0;
+      }
+    }).focusin(function() {
+      $(this).select();
+    });
 }

@@ -13,7 +13,7 @@ var submit = function() {
     }
   }
 
-  avg = Math.round(avg * 100 / (students.length)) / 100;
+  avg = ~~(avg * 100 / (students.length)) / 100;
 
   function debugBase64(base64URL){
     var win = window.open();
@@ -66,7 +66,7 @@ var calcStudentMean = function(row) {
   let sum = (grades.length > 0) ? grades.reduce((a, b) => a + b) : 0;
   // calculate the mean
   // translate all numbers into form "a.bc" (9.61, 6.92, 2.11)
-  let mean = Math.trunc(sum / count * 100) / 100;
+  let mean = ~~(sum / count * 100) / 100;
 
   return {
     name: $(".num-" + row + ".person .name").val(),

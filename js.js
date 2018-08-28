@@ -3,7 +3,9 @@ $(document).ready(function() {
 
   $(window).click(function() {
     $(".person, .grades, .controls").css("background-color", "unset");
-    $("button.grade.minus, input.grade").hide();
+    if (!alwaysShow) {
+      $("button.grade.minus, input.grade").hide();
+    }
     focused = 0;
   });
 
@@ -35,4 +37,14 @@ $(document).ready(function() {
  });
 
   $(".submit").click(submit);
+
+  // checkbox
+  $(".alwaysShow").change(function() {
+    alwaysShow = !alwaysShow;
+    if (alwaysShow) {
+      $("button.grade.minus, input.grade").show();
+    } else {
+      $("button.grade.minus, input.grade").hide();
+    }
+  });
 });
