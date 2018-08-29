@@ -14,10 +14,9 @@ $(document).ready(function() {
     for (let i = 0; i < 10; i++) {
       if (event.which === i + 48) {
         $("div.num-" + focused + " .grade-buttons")
-          .find("button")
-          .not(".minus")
+          .find("input")
           .get( (i === 0) ? 9 : i-1)
-          .click();
+          .value++;
         }
       }
   }).keydown(function(event) {

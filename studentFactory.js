@@ -37,14 +37,9 @@ var studentFactory = function() {
       .html(i+1)
       .appendTo(gradeEls[i])
       .click(function() {
-
           $(this).siblings().filter("input").get(0).value++;
-       if (hoveredOverGradeBut) {
           $(this).siblings().filter('input').focus();
-          // $(this).siblings().filter('input').blur();
-        }
-      }).mouseenter(() => hoveredOverGradeBut = true)
-      .mouseleave(() => hoveredOverGradeBut = false);
+      });
 
     // add input that shows number of grades
     let input = $('<input>')
