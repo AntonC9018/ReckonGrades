@@ -1,5 +1,11 @@
+var small = ($(window).width() <= 570);
+
 $(document).ready(function() {
   studentFactory();
+
+  $(window).resize(function() {
+  	small = ($(window).width() <= 570);
+  });
 
   $(window).click(function() {
     $(".person, .grades, .controls").css("background-color", "unset");

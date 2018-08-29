@@ -148,7 +148,8 @@ var giveClickListeners = function() {
       if (this.value === '') {
         this.value = 0;
       }
-    }).focusin(function() {
-      $(this).select();
+    }).focusin(function() {      
+      if (small) $(this).blur();
+      else $(this).select();
     });
 }

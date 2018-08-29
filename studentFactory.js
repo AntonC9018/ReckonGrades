@@ -69,7 +69,7 @@ var studentFactory = function() {
         if (u.value > 0) {
           u.value--;
         }
-        u.focus();
+         u.focus();
       }).focusin(function(event) { // very fancy refocusing on input boxes
         // Do not do if hovered over any minus button
         // It has been done to prevent a bug where when the user
