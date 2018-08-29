@@ -1,3 +1,5 @@
+var hoveredOverMinus = false;
+
 var studentFactory = function() {
   let numClass = 'num-' + studentCount;
 
@@ -36,7 +38,6 @@ var studentFactory = function() {
       .appendTo(gradeEls[i])
       .click(function() {
         $(this).siblings().filter("input").get(0).value++;
-      }).focusin(function() {
         $(this).siblings().filter('input').focus();
       });
 
@@ -68,24 +69,31 @@ var studentFactory = function() {
         if (u.value > 0) {
           u.value--;
         }
-      }).focus(function(event) { // very fancy refocusing on input boxes
-        let grade = $(this).siblings().filter('button')
-                      .not('.minus').html();
-        if (grade < 10) {
-          grade++;
-          $('.num-' + getClickedRow($(this).parent().parent())
-           + `.grades input.grade${grade}`)
-            .focus();
-        } else {
-          let numClass = getClickedRow($(this).parent().parent());
-          if (numClass === studentCount - 1) {
-            $('.num-1.person .name').focus();
+        u.focus();
+      }).focusin(function(event) { // very fancy refocusing on input boxes
+        // Do not do if hovered over any minus button
+        // It has been done to prevent a bug where when the user
+        // clicks the minus button, the next input field gets focus
+        if (!hoveredOverMinus) {
+          let grade = $(event.target).siblings().filter('button')
+                        .not('.minus').html();
+          if (grade < 10) {
+            grade++;
+            $('.num-' + getClickedRow($(event.target).parent().parent())
+             + `.grades input.grade${grade}`)
+              .focus();
           } else {
-            numClass++;
-            $(`.num-${numClass}.person .name`).focus();
+            let numClass = getClickedRow($(event.target).parent().parent());
+            if (numClass === studentCount - 1) {
+              $('.num-1.person .name').focus();
+            } else {
+              numClass++;
+              $(`.num-${numClass}.person .name`).focus();
+            }
           }
         }
-      });
+      }).mouseenter(() => hoveredOverMinus = true)
+      .mouseleave(() => hoveredOverMinus = false);
 
     if (!alwaysShow) {
       but.hide();

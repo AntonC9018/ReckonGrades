@@ -1,6 +1,7 @@
 var studentCount = 1;
 var focused = 0;
 var alwaysShow = false;
+var tabbing = false;
 
 var deleteStudent = function(elem) {
 
