@@ -35,7 +35,7 @@ div.person {
   }
   .container {
     margin: 3px;
-    padding: 0 !important;
+    padding-right: 5px !important;
     width: 100% !important;
   }
 }
