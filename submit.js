@@ -4,28 +4,31 @@ var submit = function() {
   let offSet = 1;
 
   for (let i = 1; i < studentCount; i++) {
-    students[i-offSet] = calcStudentMean(i);
-    if (isNaN(students[i-offSet].mean)) {
-      students.splice(i-offSet);
+    students[i - offSet] = calcStudentMean(i);
+    // not show students with no grades in final result
+    if (isNaN(students[i - offSet].mean)) {
+      students.splice(i - offSet);
       offSet++;
     } else {
-      avg += students[i-offSet].mean;
+      avg += students[i - offSet].mean;
     }
   }
-
+  // translate all numbers into form "a.bc" (9.61, 6.92, 2.11)
   avg = ~~(avg * 100 / (students.length)) / 100;
 
-  function debugBase64(base64URL){
+  //download the table
+  function debugBase64(base64URL) {
     var win = window.open();
-    win.document.write('<iframe src="' + base64URL  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+    win.document.write('<iframe src="' + base64URL + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
   }
 
+  // construct the table
   let file = 'Average grades\r\nName \tAverage\r\n';
-    students.forEach(function(row) {
-            let a = [row.name, row.mean];
-            file += a.join(':\t');
-            file += '\r\n';
-    });
+  students.forEach(function(row) {
+    let a = [row.name, row.mean];
+    file += a.join(':\t');
+    file += '\r\n';
+  });
   file += "Over all:  " + avg;
   file += '\r\n \r\n';
   file += 'All grades\r\n';
@@ -42,23 +45,25 @@ var submit = function() {
   let d = new Date();
 
   $(this)
-     .parent()
-     .filter("a")
-     .attr("href", "data:text/plain;charset=utf-16," + encodeURIComponent(file))
-     .attr("download", d.getMinutes() + '-' + d.getDay()
-           + '-' + d.getMonth() + '-' + d.getFullYear() + ".txt");
+    .parent()
+    .filter("a")
+    .attr("href", "data:text/plain;charset=utf-16," + encodeURIComponent(file))
+    .attr("download", d.getMinutes() + '-' + d.getDay()
+      + '-' + d.getMonth() + '-' + d.getFullYear() + ".txt");
 }
 
 var calcStudentMean = function(row) {
   let gradesCount = $(".num-" + row + ".grades .grade.grade-buttons input")
-    .map(function () { return parseInt($(this).val()); })
+    .map(function() {
+      return parseInt($(this).val());
+    })
     .get();
 
   let grades = [];
 
   for (let i = 0; i < gradesCount.length; i++) {
     for (let j = 0; j < gradesCount[i]; j++) {
-      grades.push(i+1);
+      grades.push(i + 1);
     }
   }
 

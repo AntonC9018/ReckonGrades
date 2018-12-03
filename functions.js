@@ -12,7 +12,7 @@ var deleteStudent = function(elem) {
   } else if (elem === undefined || elem === 0) {
     clickedRow = studentCount - 1;
   } else {
-  clickedRow = elem;
+    clickedRow = elem;
   }
   // Not delete the only one
   if (studentCount === 2) return;
@@ -21,10 +21,10 @@ var deleteStudent = function(elem) {
   // Move indeces of rows below deleted one up
   for (let i = clickedRow; i < studentCount - 1; i++) {
     $("div.num-" + (i + 1) + ",button.num-" + (i + 1))
-    .removeClass("num-" + (i + 1))
-    .addClass("num-" + i)
-    .find("strong")
-    .html("Student #" + i); // change the label
+      .removeClass("num-" + (i + 1))
+      .addClass("num-" + i)
+      .find("strong")
+      .html("Student #" + i); // change the label
   }
   studentCount--; // decrease the total # of students
 }
@@ -32,8 +32,8 @@ var deleteStudent = function(elem) {
 var debug = function() { // show css "num-" classes
   for (let i = 1; i < studentCount; i++) {
     $("div.num-" + i)
-    .find("strong")
-    .html("class = " + i);
+      .find("strong")
+      .html("class = " + i);
   }
 }
 
@@ -63,9 +63,9 @@ var giveClickListeners = function() {
         this.select();
       }
       // light up this row (in case of tabbing it wouldn't light up itself)
-       $(this).parent().click();
-  }).keypress(function(event) {
-  // enter
+      $(this).parent().click();
+    }).keypress(function(event) {
+    // enter
     if (event.which === 13) {
       $(this).blur();
       return;
@@ -80,36 +80,36 @@ var giveClickListeners = function() {
   });
   // 'student' and 'grades' divs
   $(".person, .grades, .controls")
-   .filter(numClass)
-   .click(function(event) {
-     // get the row clicked
-     let clickedRow = getClickedRow(this);
-     let rowClass = '.num-' + clickedRow;
+    .filter(numClass)
+    .click(function(event) {
+      // get the row clicked
+      let clickedRow = getClickedRow(this);
+      let rowClass = '.num-' + clickedRow;
 
-     // put out everything else
-     $(".person, .grades, .controls")
-       .not(rowClass)
-       .css("background-color", "unset");
+      // put out everything else
+      $(".person, .grades, .controls")
+        .not(rowClass)
+        .css("background-color", "unset");
 
-     // change bg to green
-     $(rowClass).css("background-color", "rgb(117, 227, 125)");
+      // change bg to green
+      $(rowClass).css("background-color", "rgb(117, 227, 125)");
 
-     if (!alwaysShow) {
-       // hide minus buttons and input boxes
-       $("button.grade.minus, input.grade").hide();
-       // light up minuses and input boxes
-       $(`${rowClass} button.grade.minus,${rowClass} input.grade`)
-       .toggle();
-     }
+      if (!alwaysShow) {
+        // hide minus buttons and input boxes
+        $("button.grade.minus, input.grade").hide();
+        // light up minuses and input boxes
+        $(`${rowClass} button.grade.minus,${rowClass} input.grade`)
+          .toggle();
+      }
 
-     // prevent the window's event listener's actions
-     // that could put out the new bg right away
-     event.stopPropagation();
+      // prevent the window's event listener's actions
+      // that could put out the new bg right away
+      event.stopPropagation();
 
-     // register the focus
-     focused = clickedRow;
+      // register the focus
+      focused = clickedRow;
 
-  }).mouseenter(function() {
+    }).mouseenter(function() {
     if (focused != getClickedRow(this)) {
       $(this).css("background-color", "rgb(254, 255, 191)");
     }
@@ -142,14 +142,15 @@ var giveClickListeners = function() {
         event.stopPropagation();
       } else {
         event.preventDefault();
-      };
-    }).on('blur', function() {
-      // default to '0' if the user left input box empty
-      if (this.value === '') {
-        this.value = 0;
       }
-    }).focusin(function() {      
-      if (small) $(this).blur();
-      else $(this).select();
-    });
+      ;
+    }).on('blur', function() {
+    // default to '0' if the user left input box empty
+    if (this.value === '') {
+      this.value = 0;
+    }
+  }).focusin(function() {
+    if (small) $(this).blur();
+    else $(this).select();
+  });
 }
